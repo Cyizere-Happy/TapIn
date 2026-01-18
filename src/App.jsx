@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Lottie from 'lottie-react';
 import animationData from '../public/assets/Form.json';
+import { portalService } from './services/portal.service';
 import './App.css';
 
 function App() {
@@ -11,8 +12,30 @@ function App() {
     hasCable: false
   });
 
-  // This would be set by admin - for demo purposes, you can toggle it
-  const [mode, setMode] = useState('check-in'); // 'check-in' or 'attendance'
+  const [mode, setMode] = useState('check-in');
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  // Sync portal mode on mount
+  useEffect(() => {
+    const fetchMode = async () => {
+      try {
+        const response = await portalService.getPortalMode();
+        if (response.success && response.mode) {
+          setMode(response.mode);
+        }
+      } catch (err) {
+        console.error('Failed to sync portal mode:', err);
+        // Fallback to default or show indicator
+      }
+    };
+
+    fetchMode();
+    // Optional: Set up polling or WebSocket for real-time updates
+    const interval = setInterval(fetchMode, 30000); // Check every 30s
+    return () => clearInterval(interval);
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -20,28 +43,39 @@ function App() {
       ...prev,
       [name]: type === 'checkbox' ? checked : value
     }));
+    if (error) setError(null);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+    setSubmitSuccess(false);
 
-    // Here you would send the data to your backend
-    console.log('Form submitted:', {
-      ...formData,
-      mode,
-      timestamp: new Date().toISOString()
-    });
+    try {
+      const response = await portalService.submitEntry({
+        ...formData,
+        mode
+      });
 
-    // Show success message and proceed to connect to internet
-    alert(`${mode === 'check-in' ? 'Check-in' : 'Attendance'} successful! You can now access the internet.`);
+      if (response.success) {
+        setSubmitSuccess(true);
+        // Reset form
+        setFormData({
+          name: '',
+          hasBankSlip: false,
+          hasDocuments: false,
+          hasCable: false
+        });
 
-    // Reset form
-    setFormData({
-      name: '',
-      hasBankSlip: false,
-      hasDocuments: false,
-      hasCable: false
-    });
+        // Show success message (could be a modal or toast)
+        alert(response.message || 'Check-in successful!');
+      }
+    } catch (err) {
+      setError(err.message || 'Submission failed. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -68,6 +102,8 @@ function App() {
           </div>
 
           <form className="check-in-form" onSubmit={handleSubmit}>
+            {error && <div className="error-message">{error}</div>}
+
             <div className="form-group">
               <label htmlFor="name">Full Name *</label>
               <input
@@ -77,6 +113,7 @@ function App() {
                 value={formData.name}
                 onChange={handleInputChange}
                 placeholder="Enter your full name"
+                disabled={isLoading}
                 required
               />
             </div>
@@ -91,6 +128,7 @@ function App() {
                     name="hasBankSlip"
                     checked={formData.hasBankSlip}
                     onChange={handleInputChange}
+                    disabled={isLoading}
                   />
                   <label htmlFor="bankSlip">I have my bank slip</label>
                 </div>
@@ -102,6 +140,7 @@ function App() {
                     name="hasDocuments"
                     checked={formData.hasDocuments}
                     onChange={handleInputChange}
+                    disabled={isLoading}
                   />
                   <label htmlFor="documents">I have brought the required documents (Lame de papier)</label>
                 </div>
@@ -113,6 +152,7 @@ function App() {
                     name="hasCable"
                     checked={formData.hasCable}
                     onChange={handleInputChange}
+                    disabled={isLoading}
                   />
                   <label htmlFor="cable">I have brought my own cable</label>
                 </div>
@@ -126,20 +166,13 @@ function App() {
               </div>
             )}
 
-            <button type="submit" className="submit-button">
-              {mode === 'check-in' ? 'Check In' : 'Register Attendance'}
+            <button type="submit" className="submit-button" disabled={isLoading}>
+              {isLoading ? 'Processing...' : (mode === 'check-in' ? 'Check In' : 'Register Attendance')}
             </button>
           </form>
 
           <div className="mode-indicator">
-            <p>Mode: {mode === 'check-in' ? 'Check-In' : 'Attendance'}</p>
-          </div>
-
-          {/* Admin toggle for demo - remove in production */}
-          <div className="admin-toggle">
-            <button onClick={() => setMode(mode === 'check-in' ? 'attendance' : 'check-in')}>
-              Toggle Mode (Admin)
-            </button>
+            <p>Status: <span className="status-badge">{mode === 'check-in' ? 'Check-In Active' : 'Attendance Active'}</span></p>
           </div>
         </div>
       </div>
