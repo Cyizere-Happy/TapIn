@@ -1,9 +1,6 @@
 import { apiClient } from './apiClient';
 
 class PortalService {
-    /**
-     * Fetches the current mode of the portal (check-in or attendance)
-     */
     async getPortalMode() {
         try {
             return await apiClient.get('/portal/mode');
