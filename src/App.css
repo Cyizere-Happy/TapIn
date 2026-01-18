@@ -1,0 +1,301 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Jost', sans-serif;
+    background: #f5f7fa;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+}
+
+.logo-brand {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    z-index: 10;
+}
+
+.logo-brand img {
+    height: 50px;
+    width: auto;
+    display: block;
+}
+
+.app-container {
+    width: 100%;
+    max-width: 950px;
+    display: grid;
+    grid-template-columns: 42% 58%;
+    gap: 0;
+    align-items: center;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(49, 103, 156, 0.12);
+    min-height: 520px;
+    max-height: 90vh;
+}
+
+.animation-section {
+    background: linear-gradient(135deg, #31679C 0%, #4a7fb8 100%);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 30px;
+    position: relative;
+}
+
+.animation-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.lottie-container {
+    width: 100%;
+    max-width: 340px;
+    position: relative;
+    z-index: 1;
+}
+
+.form-section {
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+}
+
+.form-header {
+    margin-bottom: 28px;
+    text-align: center;
+}
+
+.form-header h1 {
+    color: #1e293b;
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.form-header p {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.check-in-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    color: #334155;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.form-group input[type="text"] {
+    padding: 13px 16px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: 'Jost', sans-serif;
+    color: #1e293b;
+    transition: all 0.2s ease;
+    background: #fafbfc;
+}
+
+.form-group input[type="text"]:focus {
+    outline: none;
+    border-color: #31679C;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(49, 103, 156, 0.08);
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.attendance-info {
+    padding: 14px 18px;
+    background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%);
+    border-left: 3px solid #31679C;
+    border-radius: 8px;
+}
+
+.attendance-info p {
+    color: #31679C;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 1.6;
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 4px 0;
+}
+
+.checkbox-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #31679C;
+}
+
+.checkbox-item label {
+    color: #475569;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    user-select: none;
+}
+
+.submit-button {
+    margin-top: 10px;
+    padding: 15px;
+    background: linear-gradient(135deg, #31679C 0%, #2c5a8a 100%);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'Jost', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 12px rgba(49, 103, 156, 0.25);
+}
+
+.submit-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(49, 103, 156, 0.35);
+}
+
+.submit-button:active {
+    transform: translateY(0);
+}
+
+.mode-indicator {
+    text-align: center;
+    margin-top: 18px;
+    padding: 10px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.mode-indicator p {
+    color: #31679C;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Admin toggle - remove in production */
+.admin-toggle {
+    margin-top: 12px;
+    text-align: center;
+}
+
+.admin-toggle button {
+    padding: 7px 14px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 11px;
+    font-family: 'Jost', sans-serif;
+    color: #64748b;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.admin-toggle button:hover {
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .logo-brand {
+        top: 20px;
+        left: 20px;
+    }
+
+    .logo-brand img {
+        height: 42px;
+    }
+
+    .app-container {
+        grid-template-columns: 1fr;
+        max-height: none;
+    }
+
+    .animation-section {
+        padding: 35px 30px;
+        min-height: 280px;
+    }
+
+    .lottie-container {
+        max-width: 280px;
+    }
+
+    .form-section {
+        padding: 35px 28px;
+    }
+
+    .form-header h1 {
+        font-size: 22px;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-brand {
+        top: 15px;
+        left: 15px;
+    }
+
+    .logo-brand img {
+        height: 36px;
+    }
+
+    body {
+        padding: 12px;
+    }
+
+    .form-section {
+        padding: 28px 22px;
+    }
+
+    .form-header h1 {
+        font-size: 20px;
+    }
+}
